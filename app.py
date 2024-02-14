@@ -3,18 +3,19 @@ import random as rand
 import json
 import requests
 import os
+from dotenv import load_dotenv, find_dotenv
 
 app = Flask(__name__)
 
 tba_api_key = os.environ.get("TBA_API_KEY")
 
 
-@app.route("/")
-def hello_world():
-    a = rand.randint(0, 10000)
-    return render_template("test.html", a = a)
+#@app.route("/")
+#def hello_world():
+#    a = rand.randint(0, 10000)
+#    return render_template("test.html", a = a)
 
-app.run(host="0.0.0.0", port=80)
+#app.run(host="0.0.0.0", port=80)
 
 def tba_matches(key: str):
     headers = { "X-TBA-Auth-Key": tba_api_key }
@@ -24,3 +25,9 @@ def tba_matches(key: str):
     return()
 
 tba_matches("2023nyrr")
+
+def read_json(path):
+    f = open(path)
+    data = json.load(f)
+    f.close()
+    return(data)
