@@ -31,5 +31,3 @@ def read_json(path):
     data = json.load(f)
     f.close()
     return(data)
-
-
