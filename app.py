@@ -4,7 +4,7 @@ import json
 import requests
 import os
 from dotenv import load_dotenv, find_dotenv
-import datetime
+import datetime as dt
 
 app = Flask(__name__)
 
