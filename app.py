@@ -10,12 +10,12 @@ app = Flask(__name__)
 
 tba_api_key = os.environ.get("TBA_API_KEY")
 
-#@app.route("/")
-#def hello_world():
-#    a = rand.randint(0, 10000)
-#    return render_template("test.html", a = a)
+@app.route("/")
+def hello_world():
+    a = rand.randint(0, 10000)
+    return render_template("test.html", a = a)
 
-#app.run(host="0.0.0.0", port=80)
+app.run(host="0.0.0.0", port=80)
 
 def tba_matches(key: str):
     headers = { "X-TBA-Auth-Key": tba_api_key }
