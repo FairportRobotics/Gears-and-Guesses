@@ -13,7 +13,7 @@ tba_api_key = os.environ.get("TBA_API_KEY")
 @app.route("/")
 def hello_world():
     return render_template("base.html")
-
+#"<h1>This user already exists</h1><p><a href='/auth'>Try again</a> or <a href='/login'>login</a></p>"
 @app.route("/auth", methods = ['POST', 'GET'])
 def register():
     if request.method == 'POST':
@@ -22,7 +22,8 @@ def register():
         print(username, password)
         user = read_json("users.json")
         if username in user:
-            return "<h1>This user already exists</h1><p><a href='/auth'>Try again</a> or <a href='/login'>login</a></p>"
+            errorMessage = "This user already exists"
+            return render_template("auth/register.html" , errorMessage=errorMessage)
         else:
             user[username] = {"password": password, "balance": 100}
             with open(f'users.json', 'w') as f:
