@@ -42,8 +42,9 @@ def register():
 def login():
     if request.method == 'POST':
         username = request.form['username']
+        print (username)
         password = request.form['password']
-        username = session['username']
+        session['username'] = username
         user = read_json("users.json")
         if username in user and user[username]["password"] == password:
             return redirect("/home")
