@@ -12,10 +12,15 @@ tba_api_key = os.environ.get("TBA_API_KEY")
 
 @app.route("/")
 def hello_world():
-    a = rand.randint(0, 10000)
-    return render_template("test.html", a = a)
+    return render_template("base.html")
 
-app.run(host="0.0.0.0", port=80)
+@app.route("/auth")
+def register():
+    return render_template("auth/register.html")
+
+@app.route("/login")
+def login():
+    return render_template("auth/login.html")
 
 def tba_matches(key: str):
     headers = { "X-TBA-Auth-Key": tba_api_key }
@@ -31,3 +36,6 @@ def read_json(path):
     data = json.load(f)
     f.close()
     return(data)
+
+
+app.run(host="0.0.0.0", port=80)
