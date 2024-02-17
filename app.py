@@ -14,6 +14,10 @@ tba_api_key = os.environ.get("TBA_API_KEY")
 def hello_world():
     return render_template("base.html")
 
+@app.route("/hello/<name>")
+def hello(name):
+    return render_template("hello.html", name=name)
+
 @app.route("/auth", methods = ['POST', 'GET'])
 def register():
     if request.method == 'POST':
@@ -40,4 +44,4 @@ def read_json(path):
     return(data)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
+    app.run(host="0.0.0.0", port=80, debug=True)
