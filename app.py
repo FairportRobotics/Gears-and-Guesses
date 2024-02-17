@@ -31,7 +31,7 @@ def register():
             errorMessage2 = "This user already exists"
             return render_template("auth/register.html" , errorMessage=errorMessage2)
         else:
-            user[username] = {"password": password, "balance": 100}
+            user[username] = {"password": password, "balance": 100, "administrator": False}
             with open(f'users.json', 'w') as f:
                 json.dump(user, f)
             return redirect("/login")
@@ -62,6 +62,14 @@ def homePage():
 def logout():
     session.pop('username', None)
     return redirect("/")
+
+@app.route("/victors")
+def victors():
+    return render_template("victors.html")
+
+@app.route("/points")
+def points():
+    return render_template("points.html")
 
 def read_json(path):
     f = open(path)

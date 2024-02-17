@@ -1,1 +1,1 @@
-{"Big_Joe": {"password": "123456", "balance": 100}, "ab": {"password": "123456", "balance": 100}, "IMightExist": {"password": "3r3nD!l749", "balance": 100}}
+{"Big_Joe": {"password": "123456", "balance": 100, "administrator": false}, "ab": {"password": "123456", "balance": 100, "administrator": false}, "IMightExist": {"password": "3r3nD!l749", "balance": 100, "administrator": true}}
