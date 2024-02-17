@@ -1,4 +1,15 @@
-<title>Gears and Guesses Startup</title>
-<h1>Gears And Guesses</h1><p>definitely not gambling</p>
-<p>Register <a href="/auth">Click Here.</a></p>
-<p>Login <a href="/login">Click here.</a></p>
+<!doctype html>
+<title>{% block title %}{% endblock %} - Flaskr</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='../static/css/main.css') }}">
+<nav>
+  <h1>Gears and Guesses</h1>
+</nav>
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>
