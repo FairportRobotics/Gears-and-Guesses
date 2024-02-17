@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, request, render_template
 import random as rand
 import json
 import requests
@@ -14,28 +14,31 @@ tba_api_key = os.environ.get("TBA_API_KEY")
 def hello_world():
     return render_template("base.html")
 
-@app.route("/auth")
+@app.route("/auth", methods = ['POST', 'GET'])
 def register():
-    return render_template("auth/register.html")
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        print(username, password)
+        user = read_json(path)
+        if username in user:
+            return "<h1>This user already exists</h1><p><a href='/auth'>Try again</a> or <a href='/login'>login</a></p>"
+        else:
+            return "<p>a</p>"
+    else:
+        return render_template("auth/register.html")
 
 @app.route("/login")
 def login():
     return render_template("auth/login.html")
 
-def tba_matches(key: str):
-    headers = { "X-TBA-Auth-Key": tba_api_key }
-    response = requests.get(f"https://www.thebluealliance.com/api/v3/event/{key}/matches", headers)
-    with open(f'matches_{key}.json', 'wb') as f:
-        f.write(response.content)
-    return()
-
-tba_matches("2023nyrr")
-
+path = "c:/Users/pig04/Gears-and-Guesses/flaskr/users.json"
 def read_json(path):
     f = open(path)
     data = json.load(f)
     f.close()
     return(data)
 
+user = read_json(path)
 
 app.run(host="0.0.0.0", port=80)
