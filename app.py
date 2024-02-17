@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, session, url_for
 import random as rand
 import json
 import requests
@@ -7,11 +7,14 @@ from dotenv import load_dotenv, find_dotenv
 import datetime as dt
 
 app = Flask(__name__)
-
+app.secret_key = "eTZrxydtcufyviubgioy8t675r46de5ytcfy"
+session
 tba_api_key = os.environ.get("TBA_API_KEY")
 
 @app.route("/")
 def hello_world():
+    if 'username' in session:
+        return redirect("/home")
     return render_template("base.html")
 
 @app.route("/hello/<name>")
@@ -23,19 +26,41 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        print(username, password)
         user = read_json("users.json")
         if username in user:
-            return "<h1>This user already exists</h1><p><a href='/auth'>Try again</a> or <a href='/login'>login</a></p>"
+            errorMessage2 = "This user already exists"
+            return render_template("auth/register.html" , errorMessage=errorMessage2)
         else:
-            return "<p>a</p>"
+            user[username] = {"password": password, "balance": 100}
+            with open(f'users.json', 'w') as f:
+                json.dump(user, f)
+            return redirect("/login")
     else:
         return render_template("auth/register.html")
 
-@app.route("/login")
+@app.route("/login", methods = ['POST', 'GET'])
 def login():
-    return render_template("auth/login.html")
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        username = session['username']
+        user = read_json("users.json")
+        if username in user and user[username]["password"] == password:
+            return redirect("/home")
+        else:
+            errorMessage1 = "Invalid username or password"
+            return render_template("auth/login.html" , errorMessage=errorMessage1)
+    else:
+        return render_template("auth/login.html")
 
+@app.route("/home", methods = ["POST", "GET"])
+def homePage():
+    return render_template("home.html")
+
+@app.route("/logout")
+def logout():
+    session.pop('username', None)
+    return redirect("/")
 
 def read_json(path):
     f = open(path)
