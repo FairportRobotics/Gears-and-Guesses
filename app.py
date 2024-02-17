@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 import random as rand
 import json
 import requests
@@ -24,7 +24,10 @@ def register():
         if username in user:
             return "<h1>This user already exists</h1><p><a href='/auth'>Try again</a> or <a href='/login'>login</a></p>"
         else:
-            return "<p>a</p>"
+            user[username] = {"password": password, "balance": 100}
+            with open(f'users.json', 'w') as f:
+                json.dump(user, f)
+            return redirect("/login")
     else:
         return render_template("auth/register.html")
 
