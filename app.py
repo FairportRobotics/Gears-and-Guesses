@@ -57,6 +57,10 @@ def login():
 def homePage():
     return render_template("home.html")
 
+@app.route("/test", methods = ["POST", "GET"])
+def test():
+    return render_template("signedin.html")
+
 @app.route("/logout")
 def logout():
     session.pop('username', None)
