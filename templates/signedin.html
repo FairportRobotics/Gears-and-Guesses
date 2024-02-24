@@ -1,24 +1,36 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <nav>
+      <div class="nav-wrapper">
+      <a href="http://localhost/test#"> <img width="80" src='https://upload.wikimedia.org/wikipedia/commons/d/de/Gear-icon.png'> </a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="http://localhost/test#">Link 1</a></li>
+          <li><a href="http://localhost/test#">Link 2</a></li>
+          <li><a href="http://localhost/test#">Link 3</a></li>
+        </ul>
+      </div>
+    </nav>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="description" content="">
-    <title>Dashboard</title>
+    <title>Gears and Guesses</title>
     <link href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='../static/css/admin-materialize.min.css') }}" rel="stylesheet">
+    <link href="/static/../static/css/admin-materialize.min.css" rel="stylesheet">
     <!-- Material Icons-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
+<!-- This is the side bar part -->
+    <!--</head>
   <body class="has-fixed-sidenav">
     <header>
       <div class="navbar-fixed">
         <nav class="navbar white">
           <div class="nav-wrapper"><a href="#!" class="brand-logo grey-text text-darken-4">Home</a>
             <ul id="nav-mobile" class="right">
-              <!--<li class="hide-on-med-and-down"><a href="/products/admin">Buy Now!</a></li>-->
+              <li class="hide-on-med-and-down"><a href="/products/admin">Buy Now!</a></li>
               <li class="hide-on-med-and-down"><a href="#!" data-target="dropdown1" class="dropdown-trigger waves-effect"><i class="material-icons">notifications</i></a></li>
               <li><a href="#!" data-target="chat-dropdown" class="dropdown-trigger waves-effect"><i class="material-icons">settings</i></a></li>
             </ul><a href="#!" data-target="sidenav-left" class="sidenav-trigger left"><i class="material-icons black-text">menu</i></a>
@@ -85,9 +97,9 @@
             </li>
           </ul>
         </li>
-      </ul>
+      </ul>-->
 
-      <div id="dropdown1" class="dropdown-content notifications">
+     <!-- <div id="dropdown1" class="dropdown-content notifications">
         <div class="notifications-title">notifications</div>
         <div class="card">
           <div class="card-content"><span class="card-title">Joe Smith made a purchase</span>
@@ -170,72 +182,12 @@
         <div class="card-chart">
           <canvas id="flush-area-chart-blue" height="100px"></canvas>
         </div>
-      </div>
+      </div>-->
 
     </div>
     <div class="col l3 m6 s12">
-
-      <div class="card">
-        <div class="card-stacked">
-          <div class="card-metrics card-metrics-static">
-            <div class="card-metric">
-              <div class="card-metric-title">Clicks</div>
-              <div class="card-metric-value">11,893</div>
-              <div class="card-metric-change increase">
-                <i class="material-icons left">keyboard_arrow_up</i>
-                8%
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-chart">
-          <canvas id="flush-area-chart-yellow" height="100px"></canvas>
-        </div>
-      </div>
-
     </div>
     <div class="col l3 m6 s12">
-
-      <div class="card">
-        <div class="card-stacked">
-          <div class="card-metrics card-metrics-static">
-            <div class="card-metric">
-              <div class="card-metric-title">Users</div>
-              <div class="card-metric-value">230,648</div>
-              <div class="card-metric-change decrease">
-                <i class="material-icons left">keyboard_arrow_down</i>
-                2%
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-chart">
-          <canvas id="flush-area-chart-pink" height="100"></canvas>
-        </div>
-      </div>
-
-    </div>
-    <div class="col l3 m6 s12">
-
-      <div class="card">
-        <div class="card-stacked">
-          <div class="card-metrics card-metrics-static">
-            <div class="card-metric">
-              <div class="card-metric-title">Conversion Rate</div>
-              <div class="card-metric-value">0.24%</div>
-              <div class="card-metric-change decrease">
-                <i class="material-icons left">keyboard_arrow_down</i>
-                9%
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-chart">
-          <canvas id="flush-area-chart-green" height="100"></canvas>
-        </div>
-      </div>
-
-    </div>
 
     <div class="col s12">
 
@@ -243,7 +195,7 @@
         <div class="card-metrics card-metrics-toggle card-metrics-centered">
           <div class="card-metric waves-effect active" data-metric="revenue">
             <div class="card-metric-title">Revenue</div>
-            <div class="card-metric-value">$12,476.00</div>
+            <div class="card-metric-value">$69,420.69</div>
             <div class="card-metric-change">
               <i class="material-icons">keyboard_arrow_up</i>
               12%
@@ -272,200 +224,10 @@
       </div>
 
     </div>
-
-    <div class="col m6 s12">
-      <div class="card">
-        <div class="card-content">
-          <span class="card-title">Updates</span>
-          <ul class="badge-updates">
-            <li>
-              <span class="new badge red" data-badge-caption="refund"></span>
-              <span class="message">45$ refunded to Alan Chang</span>
-              <span class="time">14 minutes ago</span>
-            </li>
-            <li>
-              <span class="new badge green" data-badge-caption="purchase"></span>
-              <span class="message">45$ from Alan Chang</span>
-              <span class="time">14 minutes ago</span>
-            </li>
-            <li>
-              <span class="new badge red" data-badge-caption="refund"></span>
-              <span class="message">45$ refunded to Alan Chang</span>
-              <span class="time">14 minutes ago</span>
-            </li>
           </ul>
         </div>
       </div>
     </div>
-
-    <div class="col m6 s12">
-      <div id="tab-legend-chart-card" class="card primary-color">
-        <div class="card-content">
-          <p class="white-text">I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
-        </div>
-        <div class="card-content">
-          <canvas class="card-chart" id="tab-legend-line-chart" width="400" height="400"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <div class="col m6 s12">
-      <div class="card">
-        <div class="card-content">
-          <div class="card-title">Stacked Bar Chart</div>
-          <div class="chart-wrapper">
-            <canvas id="stacked-bar-chart" width="400" height="400"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-<!--     <div class="col m6 s12">
-      <div class="card horizontal">
-        <div class="card-stacked">
-          <div class="card-metrics">
-            <div class="card-metric waves-effect active">
-              <div class="card-metric-title">Revenue</div>
-              <div class="card-metric-value">$12,476.00</div>
-              <div class="card-metric-change">
-                <i class="material-icons left">keyboard_arrow_up</i>
-                12%
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-content">
-          <canvas id="mini-line-chart" width="100%" height="100%"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <div class="col m6 s12">
-      <div class="card horizontal">
-        <div class="card-stacked">
-          <div class="card-metrics">
-            <div class="card-metric waves-effect active">
-              <div class="card-metric-title">Revenue</div>
-              <div class="card-metric-value">$12,476.00</div>
-              <div class="card-metric-change">
-                <i class="material-icons left">keyboard_arrow_up</i>
-                12%
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-content">
-          <canvas id="mini-stacked-bar-chart" width="100%" height="100%"></canvas>
-        </div>
-      </div>
-
-    </div> -->
-
-    <div class="col m6 s12">
-      <div class="card">
-        <div class="card-content">
-          <span class="card-title">Devices</span>
-          <div class="row row-vertical-center">
-            <div class="col s6">
-              <canvas id="doughnut-chart" width="50%"></canvas>
-            </div>
-            <div class="col s6">
-              <div class="chart-legend-wrapper"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="masonry row">
-    <div class="col s12">
-      <h2>Secondary Data</h2>
-    </div>
-
-    <div class="col m6 s12">
-      <div class="card">
-        <div class="card-content">
-          <div id="vmap" style="width: 100%; height: 400px;"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col m6 s12">
-      <div class="card">
-        <div id='calendar'></div>
-      </div>
-    </div>
-
-    <div class="col s12">
-      <div class="card">
-        <table id="default-table-example" class="row-border" cellspacing="0" width="100%">
-          <thead>
-            <tr>
-              <th><label><input name="select_all" value="1" id="example-select-all" type="checkbox" /><span></span></label></th>
-              <th>Name</th>
-              <th>Position</th>
-              <th>Office</th>
-              <th>Age</th>
-              <th>Start date</th>
-              <th>Salary</th>
-            </tr>
-          </thead>
-          <!-- <tfoot>
-            <tr>
-              <th>Name</th>
-              <th>Position</th>
-              <th>Office</th>
-              <th>Age</th>
-              <th>Start date</th>
-              <th>Salary</th>
-            </tr>
-          </tfoot> -->
-          <tbody>
-            <tr>
-              <td>Tiger Nixon</td>
-              <td>System Architect</td>
-              <td>Edinburgh</td>
-              <td>61</td>
-              <td>2011/04/25</td>
-              <td>$320,800</td>
-            </tr>
-            <tr>
-              <td>Garrett Winters</td>
-              <td>Accountant</td>
-              <td>Tokyo</td>
-              <td>63</td>
-              <td>2011/07/25</td>
-              <td>$170,750</td>
-            </tr>
-            <tr>
-              <td>Ashton Cox</td>
-              <td>Junior Technical Author</td>
-              <td>San Francisco</td>
-              <td>66</td>
-              <td>2009/01/12</td>
-              <td>$86,000</td>
-            </tr>
-            <tr>
-              <td>Cedric Kelly</td>
-              <td>Senior Javascript Developer</td>
-              <td>Edinburgh</td>
-              <td>22</td>
-              <td>2012/03/29</td>
-              <td>$433,060</td>
-            </tr>
-            <tr>
-              <td>Airi Satou</td>
-              <td>Accountant</td>
-              <td>Tokyo</td>
-              <td>33</td>
-              <td>2008/11/28</td>
-              <td>$162,700</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
     </div>
   </div>
 </div>
@@ -473,31 +235,15 @@
   <div class="container">
     <div class="row">
       <div class="col s6 m3">
-        <img class="materialize-logo" src="//themes.materializecss.com/cdn/shop/t/1/assets/materialize-logo.png?v=179096390591197713681528499937" alt="Materialize">
-        <p>Made with love by Materialize.</p>
+       <!-- <img width="90" class="materialize-logo" src="https://upload.wikimedia.org/wikipedia/commons/d/de/Gear-icon.png" alt="Materialize">-->
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img width="90" class="materialize-logo" src="https://upload.wikimedia.org/wikipedia/commons/d/de/Gear-icon.png" alt="Click Me" tutorial" style="width:42px;height:42px;"></a>
+        <p>By Red Raider Robotics software team</p>
       </div>
-      <div class="col s6 m3">
-        <h5>About</h5>
-        <ul>
-          <li><a href="#!">Blog</a></li>
-          <li><a href="#!">Pricing</a></li>
-          <li><a href="#!">Docs</a></li>
-        </ul>
-      </div>
-      <div class="col s6 m3">
-        <h5>Connect</h5>
-        <ul>
-          <li><a href="#!">Community</a></li>
-          <li><a href="#!">Subscribe</a></li>
-          <li><a href="#!">Email</a></li>
-        </ul>
-      </div>
-      <div class="col s6 m3">
+      <div class="col s6 m7">
         <h5>Contact</h5>
         <ul>
-          <li><a href="#!">Twitter</a></li>
-          <li><a href="#!">Facebook</a></li>
-          <li><a href="#!">Github</a></li>
+          <li><a href="https://twitter.com/fairportrobotic">Twitter</a></li>
+          <li><a href="#!">Email</a></li>
         </ul>
       </div>
     </div>
