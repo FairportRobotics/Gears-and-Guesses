@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, redirect, session, url_for
 import random as rand
 import json
-import requests
 import os
 from dotenv import load_dotenv, find_dotenv
 import datetime as dt
@@ -15,7 +14,7 @@ tba_api_key = os.environ.get("TBA_API_KEY")
 def hello_world():
     if 'username' in session:
         return redirect("/home")
-    return render_template("base.html")
+    return render_template("auth/register.html")
 
 @app.route("/hello/<name>")
 def hello(name):
