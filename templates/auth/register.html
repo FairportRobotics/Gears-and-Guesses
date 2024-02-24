@@ -1,19 +1,23 @@
 {% extends 'base.html' %}
+{% block title %}Gears and Guesses - Register{% endblock %}
 {% block content %}
-    <title>Register for Gears and Guesses</title>
-<h1>Register an account with Gears and Guesses</h1>
-<h3>An app by Red Raider Robotics</h3>
-<form action="/auth" method="post">
-    <div>
-        <label for="username">Username</label>
-        <input id="username" name="username" type="text" />
+<div class="card card-login">
+    <div class="card-content">
+        <span class="card-title">Register for Gears and Guesses</span>
+        <p class="light">An app by Red Raider Robotics</p>
+        <p>{{errorMessage2}}</p>
+        <form action="/register" method="post">
+            <div class="input-field">
+                <input id="username" name="username" type="text" />
+                <label for="username">Username</label>
+            </div>
+            <div class="input-field">
+                <input id="password" name="password" type="password" />
+                <label for="password">Password</label>
+            </div>
+            <input class="btn right" type="submit" value="Register" />
+        </form>
+        <p><a href="/login">Have an account?</a></p>
     </div>
-    <div>
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" />
-    </div>
-    <input type="submit" value="Confirm"/>
-</form>
-<p>{{errorMessage2}}</p>
-<p>Already have and account?<a href="/login">Click here.</a></p>
+</div>
 {% endblock %}
