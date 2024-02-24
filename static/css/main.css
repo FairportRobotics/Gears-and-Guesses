@@ -1,8 +1,8 @@
 body {
-    background-image: url('https://pngimg.com/uploads/gear/gear_PNG48.png');
+    background-image: url('../images/gear.png');
     background-repeat:no-repeat ;
     background-position: top right;
     background-size: 15%;
     background-color: rgb(63, 63, 63);
+    color: whitesmoke;
 }
-
