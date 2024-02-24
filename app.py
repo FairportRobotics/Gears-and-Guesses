@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, redirect, session, url_for
 import random as rand
 import json
-import requests
 import os
 from dotenv import load_dotenv, find_dotenv
 
@@ -36,7 +35,7 @@ read_json(path)
 def hello_world():
     if 'username' in session:
         return redirect("/home")
-    return render_template("base.html")
+    return render_template("auth/register.html")
 
 @app.route("/hello/<name>")
 def hello(name):
