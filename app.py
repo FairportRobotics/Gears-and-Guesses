@@ -3,6 +3,7 @@ import random as rand
 import json
 import os
 from dotenv import load_dotenv, find_dotenv
+import requests
 
 app = Flask(__name__)
 app.secret_key = "eTZrxydtcufyviubgioy8t675r46de5ytcfy"
@@ -30,6 +31,7 @@ def read_json(path):
 path = (f"matches_{key}.json")
 read_json(path)
 
+match_data = read_json(path)
 
 @app.route("/")
 def hello_world():
@@ -85,11 +87,11 @@ def logout():
 
 @app.route("/victors")
 def victors():
-    return render_template("victors.html")
+    return render_template("victors.html", data=match_data, length=match_data.length)
 
 @app.route("/points")
 def points():
-    return render_template("points.html")
+    return render_template("points.html", data=match_data, length=match_data.length)
 
 
 
