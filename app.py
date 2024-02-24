@@ -62,7 +62,7 @@ def login():
 
 @app.route("/home", methods=["POST", "GET"])
 def home():
-    return render_template("home.html")
+    return render_template("signedin.html")
 
 
 @app.route("/logout")
