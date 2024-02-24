@@ -4,12 +4,33 @@ import json
 import requests
 import os
 from dotenv import load_dotenv, find_dotenv
-import datetime as dt
 
 app = Flask(__name__)
 app.secret_key = "eTZrxydtcufyviubgioy8t675r46de5ytcfy"
 session
 tba_api_key = os.environ.get("TBA_API_KEY")
+
+
+
+def tba_matches(key: str):
+    headers = { "X-TBA-Auth-Key": tba_api_key }
+    response = requests.get(f"https://www.thebluealliance.com/api/v3/event/{key}/matches", headers)
+    with open(f'matches_{key}.json', 'wb') as f:
+        f.write(response.content)
+    return()
+
+key = "2023nyrr"
+#key = "2024paca"
+tba_matches(key)
+
+def read_json(path):
+    f = open(path)
+    data = json.load(f)
+    f.close()
+    return(data)
+path = (f"matches_{key}.json")
+read_json(path)
+
 
 @app.route("/")
 def hello_world():
@@ -71,11 +92,7 @@ def victors():
 def points():
     return render_template("points.html")
 
-def read_json(path):
-    f = open(path)
-    data = json.load(f)
-    f.close()
-    return(data)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80, debug=True)
