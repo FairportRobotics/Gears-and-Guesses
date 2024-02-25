@@ -14,7 +14,7 @@ tba_api_key = os.environ.get("TBA_API_KEY")
 @app.route("/")
 def hello_world():
     if "username" in session:
-        return redirect("/home")
+        return render_template("home.html")
     return render_template("auth/login.html")
 
 
@@ -30,8 +30,9 @@ def register():
         password = request.form["password"]
         user = read_json("users.json")
         if username in user:
-            errorMessage2 = "This user already exists"
-            return render_template("auth/register.html", errorMessage=errorMessage2)
+            return render_template(
+                "auth/register.html", errorMessage="This user already exists"
+            )
         else:
             user[username] = {
                 "password": password,
@@ -53,16 +54,12 @@ def login():
         session["username"] = username
         user = read_json("users.json")
         if username in user and user[username]["password"] == password:
-            return redirect("/home")
+            return redirect("/")
         else:
-            errorMessage1 = "Invalid username or password"
-            return render_template("auth/login.html", errorMessage=errorMessage1)
+            return render_template(
+                "auth/login.html", errorMessage="Invalid username or password"
+            )
     return render_template("auth/login.html")
-
-
-@app.route("/home", methods=["POST", "GET"])
-def home():
-    return render_template("signedin.html")
 
 
 @app.route("/logout")
@@ -71,9 +68,14 @@ def logout():
     return redirect("/")
 
 
-@app.route("/victors")
-def victors():
-    return render_template("victors.html")
+@app.route("/leaderboard")
+def leaderboard():
+    return render_template("leaderboard.html")
+
+
+@app.route("/games")
+def games():
+    return render_template("games.html")
 
 
 @app.route("/points")
