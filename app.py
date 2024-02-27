@@ -78,6 +78,15 @@ def games():
     return render_template("games.html")
 
 
+@app.route("/games/red-or-blue")
+def red_or_blue():
+    return render_template("red_or_blue.html")
+
+
+@app.route("/games/point-picker")
+def point_picker():
+    return render_template("point_picker.html")
+
 @app.route("/points")
 def points():
     return render_template("points.html")
