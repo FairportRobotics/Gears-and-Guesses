@@ -6,6 +6,8 @@ from dotenv import load_dotenv, find_dotenv
 import datetime as dt
 import requests
 
+load_dotenv(find_dotenv())
+
 app = Flask(__name__)
 app.secret_key = "eTZrxydtcufyviubgioy8t675r46de5ytcfy"
 session
@@ -31,6 +33,14 @@ path1 = (f"matches_{key}.json")
 
 
 match_data = read_json(path1)
+
+redAlliance = {}
+blueAlliance = {}
+number = 1
+for item in match_data:
+    blueAlliance[number] = item["alliances"]["blue"]["team_keys"]
+    redAlliance[number] = item["alliances"]["red"]["team_keys"]
+    number+=1
 
 @app.route("/")
 def hello_world():
@@ -116,7 +126,7 @@ def games():
 
 @app.route("/games/red-or-blue")
 def red_or_blue():
-    return render_template("red_or_blue.html")
+    return render_template("red_or_blue.html", redAlliance=redAlliance, blueAlliance=blueAlliance)
 
 
 @app.route("/games/point-picker")
