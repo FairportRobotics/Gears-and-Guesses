@@ -98,9 +98,15 @@ def leaderboard():
         certainBalance = userBalances.get(balance, [])
         certainBalance.append(k)
         userBalances[balance] = certainBalance
-    sortedBalances = sorted(userBalances(), reverse=True)
-    print (sortedBalances)
-    return render_template("leaderboard.html", userScores=sortedBalances, users=users)
+    userScores = []
+    i=0
+    sortedBalances = sorted(userBalances, reverse=True)
+    for k1 in sortedBalances:
+        for user in userBalances[k1]:
+            i+=1
+            userScores.append((i, user, k1))
+    print (userScores)
+    return render_template("leaderboard.html", userScores=userScores)
 
 
 @app.route("/games")
@@ -122,11 +128,9 @@ def points():
     return render_template("points.html")
 
 
-def read_json(path):
-    f = open(path)
-    data = json.load(f)
-    f.close()
-    return data
+@app.route("/red_or_blue")
+def red_or_blue():
+    return render_template("red_or_blue.html", )
 
 
 if __name__ == "__main__":

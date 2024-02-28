@@ -13,8 +13,8 @@
           <li class="collection-item">3. Charles <span class="badge">$1,000</span></li>
           <li class="collection-item">4. Darleen <span class="badge">$100</span></li>
           -->
-          {% for row in users %}
-          <li></li>
+          {% for row in userScores %}
+          <li class="collection-item">{{row[0]}}:  {{row[1]}}<span class="badge">${{row[2]}}</span></li>
           {% endfor %}
         </ul>
       </div>
