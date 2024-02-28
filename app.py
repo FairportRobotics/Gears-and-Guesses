@@ -9,7 +9,7 @@ import requests
 load_dotenv(find_dotenv())
 
 app = Flask(__name__)
-app.secret_key = "eTZrxydtcufyviubgioy8t675r46de5ytcfy"
+app.secret_key = os.environ.get("secret_key")
 session
 tba_api_key = os.environ.get("TBA_API_KEY")
 
