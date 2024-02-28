@@ -27,10 +27,10 @@ def read_json(path):
     data = json.load(f)
     f.close()
     return(data)
-path = (f"matches_{key}.json")
-read_json(path)
+path1 = (f"matches_{key}.json")
 
-match_data = read_json(path)
+
+match_data = read_json(path1)
 
 @app.route("/")
 def hello_world():
