@@ -128,10 +128,5 @@ def points():
     return render_template("points.html")
 
 
-@app.route("/red_or_blue")
-def red_or_blue():
-    return render_template("red_or_blue.html", )
-
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80, debug=True)
