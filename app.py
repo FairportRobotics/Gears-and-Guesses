@@ -4,12 +4,33 @@ import json
 import os
 from dotenv import load_dotenv, find_dotenv
 import datetime as dt
+import requests
 
 app = Flask(__name__)
 app.secret_key = "eTZrxydtcufyviubgioy8t675r46de5ytcfy"
 session
 tba_api_key = os.environ.get("TBA_API_KEY")
 
+def tba_matches(key: str):
+    headers = { "X-TBA-Auth-Key": tba_api_key }
+    response = requests.get(f"https://www.thebluealliance.com/api/v3/event/{key}/matches", headers)
+    with open(f'matches_{key}.json', 'wb') as f:
+        f.write(response.content)
+    return()
+
+key = "2023nyrr"
+#key = "2024paca"
+tba_matches(key)
+
+def read_json(path):
+    f = open(path)
+    data = json.load(f)
+    f.close()
+    return(data)
+path1 = (f"matches_{key}.json")
+
+
+match_data = read_json(path1)
 
 @app.route("/")
 def hello_world():
@@ -70,7 +91,22 @@ def logout():
 
 @app.route("/leaderboard")
 def leaderboard():
-    return render_template("leaderboard.html")
+    users = read_json("users.json")
+    userBalances = {}
+    for k in users:
+        balance = users[k]["balance"]
+        certainBalance = userBalances.get(balance, [])
+        certainBalance.append(k)
+        userBalances[balance] = certainBalance
+    userScores = []
+    i=0
+    sortedBalances = sorted(userBalances, reverse=True)
+    for k1 in sortedBalances:
+        for user in userBalances[k1]:
+            i+=1
+            userScores.append((i, user, k1))
+    print (userScores)
+    return render_template("leaderboard.html", userScores=userScores)
 
 
 @app.route("/games")
@@ -92,11 +128,9 @@ def points():
     return render_template("points.html")
 
 
-def read_json(path):
-    f = open(path)
-    data = json.load(f)
-    f.close()
-    return data
+@app.route("/red_or_blue")
+def red_or_blue():
+    return render_template("red_or_blue.html", )
 
 
 if __name__ == "__main__":
