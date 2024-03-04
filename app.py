@@ -124,8 +124,9 @@ def games():
     return render_template("games.html")
 
 
-@app.route("/games/red-or-blue")
+@app.route("/games/red-or-blue", methods=['POST', 'GET'])
 def red_or_blue():
+    #if request.method == 'POST':
     return render_template("red_or_blue.html", redAlliance=redAlliance, blueAlliance=blueAlliance)
 
 
