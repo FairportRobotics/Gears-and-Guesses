@@ -72,7 +72,7 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         users = read_json("data/users.json")
-        if username in user:
+        if username in users:
             return render_template("/auth/register.html", errorMessage="This user already exists")
         else:
             users[username] = {
