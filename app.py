@@ -131,22 +131,29 @@ def red_or_blue():
         match = request.form["match"]
         alliance = request.form["alliance"]
         wager = request.form["wager"]
-        print(match+" "+alliance+" "+wager)
+        #print(match+" "+alliance+" "+wager)
         file_path = f'data/red_or_blue/{match}.json'
-        try:
-            with open(file_path, "r") as f:
-                data = json.load(f)
-        except:
-            data = []
-        data.append({"username": "username", "alliance": alliance, "wager": wager})
-        with open(file_path, 'w') as f:
-            f.write(json.dumps(data))
+        username = session["username"]
+        if is_valid_wager(username, wager):
+            try:
+                data = read_json(file_path)
+            except:
+                data = []
+            data.append({"username": username, "alliance": alliance, "wager": wager})
+            with open(file_path, 'w') as f:
+                f.write(json.dumps(data))
+        else:
+            error_message = "Silly!  You don't have {wager} robo coins!"
     return render_template("red_or_blue.html", redAlliance=redAlliance, blueAlliance=blueAlliance)
 
 
 @app.route("/games/point-picker")
 def point_picker():
     return render_template("point_picker.html", redAlliance=redAlliance, blueAlliance=blueAlliance)
+
+def is_valid_wager(username:str, wager:float)->bool:
+    users = read_json("users.json")
+    return users[username]["balance"] >= wager
 
 
 if __name__ == "__main__":
