@@ -34,10 +34,7 @@ def writeJson(path, data):
     with open(path, 'w') as f:
         f.write(json.dumps(data))
 
-path1 = (f"matches_{key}.json")
-
-
-match_data = read_json(path1)
+match_data = read_json(f"matches_{key}.json")
 
 
 gameMatches = {}
@@ -49,10 +46,11 @@ for item in match_data:
         gameMatches[item["match_number"]] = {"match_number":item["match_number"], "key": item["key"], "blue": f"Teams {blue_text}", "red": f"Teams {red_text}"}
     else:
         scorableMatches.append(item["key"])
-        scorableMatches.append(item["winning_alliance"])
-        scorableMatches.append({"blue": item["score_breakdown"]["blue"]["totalPoints"], "red": item["score_breakdown"]["red"]["totalPoints"]})
+        #scorableMatches.append(item["winning_alliance"])
+        #scorableMatches.append({"blue": item["score_breakdown"]["blue"]["totalPoints"], "red": item["score_breakdown"]["red"]["totalPoints"]})
 gameMatches = dict(sorted(gameMatches.items()))
 gameMatches = gameMatches.values()
+
 
 @app.route("/")
 def hello_world():
@@ -165,14 +163,15 @@ def point_picker():
 def admin():
     if(not session["admin"]):
         redirect("/")
-    for name in glob.glob("data/red_or_blue/*.json"):
-        print(name)
-    # use glob to get the list of files in data/red_or_blue
-    # loop over those files and open the json
-    # check the status of the first item to see if it's unscored
-    # if so, add the match key to the scorable rd or blue list
-    # pass the list into the template
-    return render_template("admin.html")
+    # Check to see which events can be scored
+    red_or_blue = []
+    for file_path in glob.glob(f"data/red_or_blue/{key}*.json"):
+        check_me = read_json(file_path)
+        file_name = file_path.replace(".json", "").replace("\\","/").split("/")[-1]
+        if check_me[0]["results"] == "undetermined" and file_name in scorableMatches:
+            red_or_blue.append(file_name)
+
+    return render_template("admin.html", red_or_blue = red_or_blue)
 
 
 def checkValidity(username:str, wager:float)->bool:
