@@ -39,8 +39,7 @@ for item in match_data:
     if(item["actual_time"] is None):
         blue_text = ", ".join([x.replace("frc","") for x in item["alliances"]["blue"]["team_keys"]])
         red_text = ", ".join([x.replace("frc","") for x in item["alliances"]["red"]["team_keys"]])
-        item_data = {"match_number":item["match_number"], "key": item["key"], "blue": f"Teams {blue_text}", "red": f"Teams {red_text}"}
-        gameMatches[item["match_number"]] = item_data
+        gameMatches[item["match_number"]] = {"match_number":item["match_number"], "key": item["key"], "blue": f"Teams {blue_text}", "red": f"Teams {red_text}"}
 gameMatches = dict(sorted(gameMatches.items()))
 gameMatches = gameMatches.values()
 
