@@ -33,11 +33,8 @@ path1 = (f"matches_{key}.json")
 
 match_data = read_json(path1)
 
-redAlliance = []
-blueAlliance = []
-gameMatches = []
-matchInfo = {}
 
+gameMatches = []
 for item in match_data:
     if(item["actual_time"] is None):
         blue_text = ", ".join([x.replace("frc","") for x in item["alliances"]["blue"]["team_keys"]])
