@@ -58,7 +58,7 @@ gameMatches = gameMatches.values()
 def hello_world():
     if "username" in session:
         return render_template("home.html")
-    return render_template("auth/login.html")
+    return render_template("/auth/login.html")
 
 
 @app.route("/hello/<name>")
@@ -71,18 +71,16 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        users = read_json("data/users.json")
+        users = read_json("/data/users.json")
         if username in user:
-            return render_template(
-                "auth/register.html", errorMessage="This user already exists"
-            )
+            return render_template("/auth/register.html", errorMessage="This user already exists")
         else:
             users[username] = {
                 "password": password,
                 "balance": 100,
                 "administrator": False,
             }
-            writeJson("data/users.json", users)
+            writeJson("/data/users.json", users)
             return redirect("/login")
     return render_template("auth/register.html")
 
@@ -94,7 +92,7 @@ def login():
         print(username)
         password = request.form["password"]
         session["username"] = username
-        user = read_json("data/users.json")
+        user = read_json("/data/users.json")
         if username in user and user[username]["password"] == password:
             session["admin"] = user[username]["administrator"]
             return redirect("/")
@@ -143,7 +141,7 @@ def red_or_blue():
         alliance = request.form["alliance"]
         wager = request.form["wager"]
         #print(match+" "+alliance+" "+wager)
-        file_path = f'data/red_or_blue/{match}.json'
+        file_path = f'/data/red_or_blue/{match}.json'
         username = session["username"]
         if checkValidity(username, wager):
 
@@ -152,7 +150,7 @@ def red_or_blue():
             except:
                 data = []
             data.append({"username": username, "alliance": alliance, "wager": wager, "results": "undetermined"})
-            writeJson(f'data/red_or_blue/{match}.json', data)
+            writeJson(f'/data/red_or_blue/{match}.json', data)
         else:
             return render_template("red_or_blue.html", gameMatches=gameMatches, error_message=f"You don't have {wager} roboCoins!")
     return render_template("red_or_blue.html", gameMatches=gameMatches)
@@ -178,11 +176,11 @@ def admin():
 
 
 def checkValidity(username:str, wager:float)->bool:
-    users = read_json("data/users.json")
+    users = read_json("/data/users.json")
     return float(users[username]["balance"]) >= float(wager)
 
 def accountPayment(username:str, wager:float):
-    users = read_json("data/users.json")
+    users = read_json("/data/users.json")
     users[username]["balance"] -= wager
     writeJson("data/users.json", users)
 
