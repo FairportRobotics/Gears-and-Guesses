@@ -1,4 +1,5 @@
 data/red_or_blue/*.json
+data/matches*.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
