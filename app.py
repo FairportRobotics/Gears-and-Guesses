@@ -76,8 +76,8 @@ def home():
     return render_template("auth/login.html")
 
 
-#@app.route("/hello/<name>")
-#def hello(name):
+# @app.route("/hello/<name>")
+# def hello(name):
 #    return render_template("hello.html", name=name)
 
 
@@ -111,8 +111,6 @@ def login():
         hashed_password = hash_me(password)
         session["username"] = username
         user = read_json("data/users.json")
-        print(user[username]["password"])
-        print(hashed_password)
         if username in user and user[username]["password"] == hashed_password:
             session["admin"] = user[username]["administrator"]
             return redirect("/")
