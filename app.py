@@ -164,16 +164,12 @@ def point_picker():
 def admin():
     if(not session["admin"]):
         redirect("/")
+    # use glob to get the list of files in data/red_or_blue
+    # loop over those files and open the json
+    # check the status of the first item to see if it's undecided
+    # if so, add the match key to the scorable rd or blue list
+    # pass the list into the template
     return render_template("admin.html")
-
-@app.route("/admin/red-or-blue", methods=['GET', 'POST'])
-def adminRedBlue():
-    if(not session["admin"]):
-        redirect("/")
-    if request.method == 'POST':
-        print("a")
-    return render_template("admin.html", scorableMatches=scorableMatches)
-
 
 
 def checkValidity(username:str, wager:float)->bool:
