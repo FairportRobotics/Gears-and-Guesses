@@ -16,33 +16,47 @@ session
 tba_api_key = os.environ.get("TBA_API_KEY")
 
 
+def checkValidity(username: str, wager: float) -> bool:
+    users = readJSON("data/users.json")
+    return float(users[username]["balance"]) >= float(wager)
+
+
+def accountPayment(username: str, wager: float):
+    users = readJSON("data/users.json")
+    users[username]["balance"] += wager
+    writeJSON("data/users.json", users)
+
+
+def hash_me(input):
+    return sha256(input.encode("utf-8")).hexdigest()
+
+
+def readJSON(path):
+    with open(path) as f:
+        data = json.load(f)
+    return data
+
+
+def writeJSON(path, data):
+    with open(path, "w") as f:
+        f.write(json.dumps(data))
+
+
 def tba_matches(key: str):
     headers = {"X-TBA-Auth-Key": tba_api_key}
     response = requests.get(
         f"https://www.thebluealliance.com/api/v3/event/{key}/matches", headers
     )
-    with open(f"matches_{key}.json", "wb") as f:
+    with open(f"data/matches_{key}.json", "wb") as f:
         f.write(response.content)
     return ()
 
 
 key = "2024casf"
+# Pull the latest data
 tba_matches(key)
 
-
-def read_json(path):
-    f = open(path)
-    data = json.load(f)
-    f.close()
-    return data
-
-
-def writeJson(path, data):
-    with open(path, "w") as f:
-        f.write(json.dumps(data))
-
-
-match_data = read_json(f"matches_{key}.json")
+match_data = readJSON(f"data/matches_{key}.json")
 
 
 gameMatches = {}
@@ -63,17 +77,31 @@ for item in match_data:
         }
     else:
         scorableMatches.append(item["key"])
-        # scorableMatches.append(item["winning_alliance"])
-        # scorableMatches.append({"blue": item["score_breakdown"]["blue"]["totalPoints"], "red": item["score_breakdown"]["red"]["totalPoints"]})
+# Sort the match data
 gameMatches = dict(sorted(gameMatches.items()))
 gameMatches = gameMatches.values()
 
 
 @app.route("/")
 def home():
-    if "username" in session:
-        return render_template("home.html")
-    return render_template("auth/login.html")
+    if not "username" in session:
+        return render_template("auth/login.html")
+    # TODO Get the guesses for the user
+    my_red_or_blue_wagers = []
+    for file_path in glob.glob(f"data/red_or_blue/{key}*.json"):
+        for row in readJSON(file_path):
+            if row["username"] == session["username"]:
+                match_name = (
+                    file_path.replace(".json", "").replace("\\", "/").split("/")[-1]
+                )
+                my_red_or_blue_wagers.append(
+                    {
+                        "key": match_name,
+                        "wager": row["wager"],
+                        "results": row["results"],
+                    }
+                )
+    return render_template("home.html", red_or_blue_wagers=my_red_or_blue_wagers)
 
 
 # @app.route("/hello/<name>")
@@ -87,7 +115,7 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         hashed_password = hash_me(password)
-        users = read_json("data/users.json")
+        users = readJSON("data/users.json")
         if username in users:
             return render_template(
                 "/auth/register.html", errorMessage="This user already exists"
@@ -98,7 +126,7 @@ def register():
                 "balance": 1000,
                 "administrator": False,
             }
-            writeJson("data/users.json", users)
+            writeJSON("data/users.json", users)
             return redirect("/login")
     return render_template("auth/register.html")
 
@@ -110,7 +138,7 @@ def login():
         password = request.form["password"]
         hashed_password = hash_me(password)
         session["username"] = username
-        user = read_json("data/users.json")
+        user = readJSON("data/users.json")
         if username in user and user[username]["password"] == hashed_password:
             session["admin"] = user[username]["administrator"]
             return redirect("/")
@@ -129,7 +157,7 @@ def logout():
 
 @app.route("/leaderboard")
 def leaderboard():
-    users = read_json("data/users.json")
+    users = readJSON("data/users.json")
     userBalances = {}
     for k in users:
         balance = users[k]["balance"]
@@ -153,18 +181,16 @@ def games():
 
 @app.route("/games/red-or-blue", methods=["POST", "GET"])
 def red_or_blue():
-
     if request.method == "POST":
         match = request.form["match"]
         alliance = request.form["alliance"]
         wager = request.form["wager"]
-        # print(match+" "+alliance+" "+wager)
         file_path = f"data/red_or_blue/{match}.json"
         username = session["username"]
         if checkValidity(username, wager):
 
             try:
-                data = read_json(file_path)
+                data = readJSON(file_path)
             except:
                 data = []
             data.append(
@@ -175,7 +201,7 @@ def red_or_blue():
                     "results": "undetermined",
                 }
             )
-            writeJson(f"data/red_or_blue/{match}.json", data)
+            writeJSON(f"data/red_or_blue/{match}.json", data)
             # Deduct money for the wager
             accountPayment(username, -1 * float(wager))
         else:
@@ -199,7 +225,7 @@ def admin():
     # Check to see which events can be scored
     red_or_blue = []
     for file_path in glob.glob(f"data/red_or_blue/{key}*.json"):
-        check_me = read_json(file_path)
+        check_me = readJSON(file_path)
         file_name = file_path.replace(".json", "").replace("\\", "/").split("/")[-1]
         if check_me[0]["results"] == "undetermined" and file_name in scorableMatches:
             red_or_blue.append(file_name)
@@ -216,7 +242,7 @@ def score_red_or_blue(file_name):
     # Update the wagers file with wins and losses
     wagers = []
     file_path = f"data/red_or_blue/{file_name}.json"
-    for row in read_json(file_path):
+    for row in readJSON(file_path):
         if row["alliance"] == winning_alliance:
             row["results"] = "win"
             # Award the winnings
@@ -224,23 +250,8 @@ def score_red_or_blue(file_name):
         else:
             row["results"] = "lost"
         wagers.append(row)
-    writeJson(file_path, wagers)
+    writeJSON(file_path, wagers)
     return redirect("/admin")
-
-
-def checkValidity(username: str, wager: float) -> bool:
-    users = read_json("data/users.json")
-    return float(users[username]["balance"]) >= float(wager)
-
-
-def accountPayment(username: str, wager: float):
-    users = read_json("data/users.json")
-    users[username]["balance"] += wager
-    writeJson("data/users.json", users)
-
-
-def hash_me(input):
-    return sha256(input.encode("utf-8")).hexdigest()
 
 
 if __name__ == "__main__":
