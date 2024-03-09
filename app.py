@@ -20,10 +20,8 @@ def tba_matches(key: str):
         f.write(response.content)
     return()
 
-key = "2023nyrr"
-#key = "2024paca"
-#key="2024casf"
-#tba_matches(key)
+key="2024casf"
+tba_matches(key)
 
 def read_json(path):
     f = open(path)
@@ -35,13 +33,19 @@ path1 = (f"matches_{key}.json")
 
 match_data = read_json(path1)
 
-redAlliance = {}
-blueAlliance = {}
-number = 1
+redAlliance = []
+blueAlliance = []
+gameMatches = []
+matchInfo = {}
+
 for item in match_data:
-    blueAlliance[number] = item["alliances"]["blue"]["team_keys"]
-    redAlliance[number] = item["alliances"]["red"]["team_keys"]
-    number+=1
+    if(item["actual_time"] is None):
+        blueAlliance = item["alliances"]["blue"]["team_keys"]
+        redAlliance = item["alliances"]["red"]["team_keys"]
+        matchInfo["blue"] = blueAlliance
+        matchInfo["red"] = redAlliance
+        matchInfo["key"] = item["key"]
+        gameMatches.append(matchInfo)
 
 @app.route("/")
 def hello_world():
@@ -86,6 +90,7 @@ def login():
         session["username"] = username
         user = read_json("users.json")
         if username in user and user[username]["password"] == password:
+            session["admin"] = user[username]["administrator"]
             return redirect("/")
         else:
             return render_template(
@@ -134,7 +139,7 @@ def red_or_blue():
         #print(match+" "+alliance+" "+wager)
         file_path = f'data/red_or_blue/{match}.json'
         username = session["username"]
-        if is_valid_wager(username, wager):
+        if checkValidity(username, wager):
             try:
                 data = read_json(file_path)
             except:
@@ -143,15 +148,15 @@ def red_or_blue():
             with open(file_path, 'w') as f:
                 f.write(json.dumps(data))
         else:
-            error_message = "Silly!  You don't have {wager} robo coins!"
-    return render_template("red_or_blue.html", redAlliance=redAlliance, blueAlliance=blueAlliance)
+            error_message = "Silly!  You don't have "+wager+" robo coins!"
+    return render_template("red_or_blue.html", gameMatches=gameMatches, error_message=error_message)
 
 
 @app.route("/games/point-picker")
 def point_picker():
-    return render_template("point_picker.html", redAlliance=redAlliance, blueAlliance=blueAlliance)
+    return render_template("point_picker.html", gameMatches=gameMatches)
 
-def is_valid_wager(username:str, wager:float)->bool:
+def checkValidity(username:str, wager:float)->bool:
     users = read_json("users.json")
     return users[username]["balance"] >= wager
 
