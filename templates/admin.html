@@ -1,0 +1,27 @@
+{% extends 'signedin.html' %}
+{% block title %}Gears and Guesses - Admin{% endblock %}
+{% block content %}
+<div class="row">
+    
+    <div class="col s6 m6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title red-text">Blue or Red</span>
+          <br/>
+          {% for row in red_or_blue %}
+          <p><a href="/score/red-or-blue/{{row}}" class="blue btn">Score {{row}}</a></p><br/>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col s6 m6">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title red-text">Point Picker</span>
+          </div>
+        </div>
+      </div>
+
+  </div>
+{% endblock %}

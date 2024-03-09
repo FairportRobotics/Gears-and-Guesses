@@ -1,3 +1,4 @@
+data/red_or_blue/*.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
