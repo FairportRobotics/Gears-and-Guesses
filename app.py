@@ -84,9 +84,24 @@ gameMatches = gameMatches.values()
 
 @app.route("/")
 def home():
-    if "username" in session:
-        return render_template("home.html")
-    return render_template("auth/login.html")
+    if not "username" in session:
+        return render_template("auth/login.html")
+    # TODO Get the guesses for the user
+    my_red_or_blue_wagers = []
+    for file_path in glob.glob(f"data/red_or_blue/{key}*.json"):
+        for row in readJSON(file_path):
+            if row["username"] == session["username"]:
+                match_name = (
+                    file_path.replace(".json", "").replace("\\", "/").split("/")[-1]
+                )
+                my_red_or_blue_wagers.append(
+                    {
+                        "key": match_name,
+                        "wager": row["wager"],
+                        "results": row["results"],
+                    }
+                )
+    return render_template("home.html", red_or_blue_wagers=my_red_or_blue_wagers)
 
 
 # @app.route("/hello/<name>")
@@ -166,12 +181,10 @@ def games():
 
 @app.route("/games/red-or-blue", methods=["POST", "GET"])
 def red_or_blue():
-
     if request.method == "POST":
         match = request.form["match"]
         alliance = request.form["alliance"]
         wager = request.form["wager"]
-        # print(match+" "+alliance+" "+wager)
         file_path = f"data/red_or_blue/{match}.json"
         username = session["username"]
         if checkValidity(username, wager):
