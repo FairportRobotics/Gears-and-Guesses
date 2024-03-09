@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv, find_dotenv
 import datetime as dt
 import requests
+import glob
 
 load_dotenv(find_dotenv())
 
@@ -47,7 +48,9 @@ for item in match_data:
         red_text = ", ".join([x.replace("frc","") for x in item["alliances"]["red"]["team_keys"]])
         gameMatches[item["match_number"]] = {"match_number":item["match_number"], "key": item["key"], "blue": f"Teams {blue_text}", "red": f"Teams {red_text}"}
     else:
-        scorableMatches.append(item["key"], item["winning_alliance"], {"blue": item["score_breakdown"]["blue"]["totalPoints"], "red": item["score_breakdown"]["red"]["totalPoints"]})
+        scorableMatches.append(item["key"])
+        scorableMatches.append(item["winning_alliance"])
+        scorableMatches.append({"blue": item["score_breakdown"]["blue"]["totalPoints"], "red": item["score_breakdown"]["red"]["totalPoints"]})
 gameMatches = dict(sorted(gameMatches.items()))
 gameMatches = gameMatches.values()
 
@@ -164,9 +167,11 @@ def point_picker():
 def admin():
     if(not session["admin"]):
         redirect("/")
+    for name in glob.glob("/data/red_or_blue/*.json"):
+        print(name)
     # use glob to get the list of files in data/red_or_blue
     # loop over those files and open the json
-    # check the status of the first item to see if it's undecided
+    # check the status of the first item to see if it's unscored
     # if so, add the match key to the scorable rd or blue list
     # pass the list into the template
     return render_template("admin.html")
