@@ -132,6 +132,7 @@ def games():
 
 @app.route("/games/red-or-blue", methods=['POST', 'GET'])
 def red_or_blue():
+    
     if request.method == 'POST':
         match = request.form["match"]
         alliance = request.form["alliance"]
@@ -148,8 +149,8 @@ def red_or_blue():
             with open(file_path, 'w') as f:
                 f.write(json.dumps(data))
         else:
-            error_message = "Silly!  You don't have "+wager+" robo coins!"
-    return render_template("red_or_blue.html", gameMatches=gameMatches, error_message=error_message)
+            return render_template("red_or_blue.html", gameMatches=gameMatches, error_message="You dont have that many "+wager+" roboCoins!")
+    return render_template("red_or_blue.html", gameMatches=gameMatches)
 
 
 @app.route("/games/point-picker")
