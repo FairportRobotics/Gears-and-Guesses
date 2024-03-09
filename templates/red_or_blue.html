@@ -8,20 +8,24 @@
           <span class="card-title red-text">Red or Blue</span>
           <p>{{error_message}}</p>
           <p>TODO:Game Rules</p>
-          <form>
+          <form id="hide_me">
             {% for row in gameMatches %}
             <p>
               Match {{row["match_number"]}} 
-              <input data-match="{{row['key']}}" data-alliance="red" class="red btn red_or_blue_button" value="{{row['red']}}" type="button"/>
-              <input data-match="{{row['key']}}" data-alliance="blue" class="blue btn red_or_blue_button" value="{{row['blue']}}" type="button"/>
+              <input data-number="{{row['match_number']}}" data-match="{{row['key']}}" data-alliance="red" class="red btn red_or_blue_button" value="{{row['red']}}" type="button"/>
+              <input data-number="{{row['match_number']}}" data-alliance="blue" class="blue btn red_or_blue_button" value="{{row['blue']}}" type="button"/>
             </p><br/>
             {%endfor%}
           </form>
-          <form action="/games/red-or-blue" method="post">
-            <input name="match">
-            <input name="alliance">
-            <input name="wager">
-            <input type="submit">
+          <form id="wager_form" action="/games/red-or-blue" method="post" style="display: none;">
+            <span id="wager_summary"></span>
+            <input id="match" name="match" type="hidden">
+            <input id="alliance" name="alliance" type="hidden">
+            <div class="input-field">
+              <input name="wager" type="text">
+              <label for="wager">How much do you want to wager?</label>
+            </div>
+            <input type="submit" value="Guess!" class="blue btn">
           </form>
         </div>
         <!--<div class="card-action">
@@ -31,4 +35,18 @@
       </div>
     </div>
   </div>
+{% endblock %}
+{% block scripts %}
+<script>
+  $("input.red_or_blue_button").click(function(){
+    var match = $(this).attr("data-match");
+    var alliance = $(this).attr("data-alliance");
+    var number = $(this).attr("data-number");
+    $("#wager_summary").html("You are guessing that the " + alliance + " alliance will win match " + number + "!");
+    $("#match").val(match);
+    $("#alliance").val(alliance);
+    $("#wager_form").show();
+    $("#hide_me").hide();
+  });
+</script>
 {% endblock %}
