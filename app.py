@@ -160,7 +160,13 @@ def point_picker():
     return render_template("point_picker.html", gameMatches=gameMatches)
 
 
-@app.route("/admin", methods=['GET', 'POST'])
+@app.route("/admin")
+def admin():
+    if(not session["admin"]):
+        redirect("/")
+    return render_template("admin.html")
+
+@app.route("/admin/red-or-blue", methods=['GET', 'POST'])
 def adminRedBlue():
     if(not session["admin"]):
         redirect("/")
