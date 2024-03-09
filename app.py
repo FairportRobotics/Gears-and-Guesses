@@ -21,6 +21,7 @@ def tba_matches(key: str):
     return()
 
 key="2024casf"
+key="2024mose"
 tba_matches(key)
 
 def read_json(path):
@@ -145,7 +146,7 @@ def red_or_blue():
             with open(file_path, 'w') as f:
                 f.write(json.dumps(data))
         else:
-            return render_template("red_or_blue.html", gameMatches=gameMatches, error_message="You dont have that many "+wager+" roboCoins!")
+            return render_template("red_or_blue.html", gameMatches=gameMatches, error_message=f"You don't have {wager} roboCoins!")
     return render_template("red_or_blue.html", gameMatches=gameMatches)
 
 
@@ -155,7 +156,7 @@ def point_picker():
 
 def checkValidity(username:str, wager:float)->bool:
     users = read_json("users.json")
-    return users[username]["balance"] >= wager
+    return float(users[username]["balance"]) >= float(wager)
 
 
 if __name__ == "__main__":
