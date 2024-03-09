@@ -40,12 +40,8 @@ matchInfo = {}
 
 for item in match_data:
     if(item["actual_time"] is None):
-        blueAlliance = item["alliances"]["blue"]["team_keys"]
-        redAlliance = item["alliances"]["red"]["team_keys"]
-        matchInfo["blue"] = blueAlliance
-        matchInfo["red"] = redAlliance
-        matchInfo["key"] = item["key"]
-        gameMatches.append(matchInfo)
+        gameMatches.append({"key": item["key"], "blue":item["alliances"]["blue"]["team_keys"], "red":item["alliances"]["red"]["team_keys"]})
+
 
 @app.route("/")
 def hello_world():
