@@ -126,7 +126,13 @@ def games():
 
 @app.route("/games/red-or-blue", methods=['POST', 'GET'])
 def red_or_blue():
-    #if request.method == 'POST':
+    if request.method == 'POST':
+        match = request.form["match"]
+        alliance = request.form["alliance"]
+        wager = request.form["wager"]
+        print(match+" "+alliance+" "+wager)
+        with open(f'data/red_or_blue/{match}.json', 'w') as f:
+            f.write()
     return render_template("red_or_blue.html", redAlliance=redAlliance, blueAlliance=blueAlliance)
 
 
