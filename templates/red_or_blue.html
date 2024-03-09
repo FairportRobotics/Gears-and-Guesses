@@ -14,7 +14,7 @@
               Match {{row["match_number"]}} 
               <input data-match="{{row['key']}}" data-alliance="red" class="red btn red_or_blue_button" value="{{row['red']}}" type="button"/>
               <input data-match="{{row['key']}}" data-alliance="blue" class="blue btn red_or_blue_button" value="{{row['blue']}}" type="button"/>
-            </p>
+            </p><br/>
             {%endfor%}
           </form>
           <form action="/games/red-or-blue" method="post">
