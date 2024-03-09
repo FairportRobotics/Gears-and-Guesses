@@ -21,7 +21,7 @@ def tba_matches(key: str):
         f.write(response.content)
     return()
 
-key="2024mose"
+key="2024casf"
 tba_matches(key)
 
 def read_json(path):
