@@ -164,6 +164,11 @@ def point_picker():
 def admin():
     if(not session["admin"]):
         redirect("/")
+    # Check for red or blue matches ready to score
+    ## Get the directory listing in data/red_or_blue with glob
+    ## Loop over the directory and read in the json
+    ## Check the status of the first item.  If it's "undetermined" add it to the list for red or blue
+    ## Pass the undetermined red or blue list to admin template
     return render_template("admin.html")
 
 @app.route("/admin/red-or-blue", methods=['GET', 'POST'])
