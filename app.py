@@ -79,7 +79,7 @@ def register():
                 "balance": 100,
                 "administrator": False,
             }
-            writeJson("data/users", users)
+            writeJson("data/users.json", users)
             return redirect("/login")
     return render_template("auth/register.html")
 
@@ -179,7 +179,7 @@ def checkValidity(username:str, wager:float)->bool:
 def accountPayment(username:str, wager:float):
     users = read_json("data/users.json")
     users[username]["balance"] -= wager
-    writeJson("data/users", users)
+    writeJson("data/users.json", users)
 
 
 if __name__ == "__main__":
