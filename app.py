@@ -40,7 +40,9 @@ matchInfo = {}
 
 for item in match_data:
     if(item["actual_time"] is None):
-        gameMatches.append({"key": item["key"], "blue":item["alliances"]["blue"]["team_keys"], "red":item["alliances"]["red"]["team_keys"]})
+        blue_text = ", ".join([x.replace("frc","") for x in item["alliances"]["blue"]["team_keys"]])
+        red_text = ", ".join([x.replace("frc","") for x in item["alliances"]["red"]["team_keys"]])
+        gameMatches.append({"match_number":item["match_number"], "key": item["key"], "blue": f"Teams {blue_text}", "red": f"Teams {red_text}"})
 
 
 @app.route("/")
