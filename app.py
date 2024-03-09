@@ -34,13 +34,15 @@ path1 = (f"matches_{key}.json")
 match_data = read_json(path1)
 
 
-gameMatches = []
+gameMatches = {}
 for item in match_data:
     if(item["actual_time"] is None):
         blue_text = ", ".join([x.replace("frc","") for x in item["alliances"]["blue"]["team_keys"]])
         red_text = ", ".join([x.replace("frc","") for x in item["alliances"]["red"]["team_keys"]])
-        gameMatches.append({"match_number":item["match_number"], "key": item["key"], "blue": f"Teams {blue_text}", "red": f"Teams {red_text}"})
-
+        item_data = {"match_number":item["match_number"], "key": item["key"], "blue": f"Teams {blue_text}", "red": f"Teams {red_text}"}
+        gameMatches[item["match_number"]] = item_data
+gameMatches = dict(sorted(gameMatches.items()))
+gameMatches = gameMatches.values()
 
 @app.route("/")
 def hello_world():
