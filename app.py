@@ -20,7 +20,6 @@ def tba_matches(key: str):
         f.write(response.content)
     return()
 
-key="2024casf"
 key="2024mose"
 tba_matches(key)
 
@@ -156,6 +155,26 @@ def red_or_blue():
 @app.route("/games/point-picker")
 def point_picker():
     return render_template("point_picker.html", gameMatches=gameMatches)
+
+
+@app.route("/admin")
+def admin():
+    if(not session["admin"]):
+        redirect("/")
+    return render_template("admin.html")
+
+@app.route("/admin/red-or-blue", methods=['GET', 'POST'])
+def adminRedBlue():
+    if(not session["admin"]):
+        redirect("/")
+    return render_template("adminRedBlue.html")
+
+@app.route("/admin/points", methods=['GET', 'POST'])
+def adminPoints():
+    if(not session["admin"]):
+        redirect("/")
+    return render_template("adminPoints.html")
+
 
 def checkValidity(username:str, wager:float)->bool:
     users = read_json("users.json")
