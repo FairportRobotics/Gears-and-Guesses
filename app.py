@@ -30,7 +30,7 @@ def read_json(path):
     return(data)
 
 def writeJson(path, data):
-    with open(f'{path}.json', 'w') as f:
+    with open(path, 'w') as f:
         f.write(json.dumps(data))
 
 path1 = (f"matches_{key}.json")
