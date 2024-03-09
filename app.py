@@ -47,7 +47,7 @@ for item in match_data:
         red_text = ", ".join([x.replace("frc","") for x in item["alliances"]["red"]["team_keys"]])
         gameMatches[item["match_number"]] = {"match_number":item["match_number"], "key": item["key"], "blue": f"Teams {blue_text}", "red": f"Teams {red_text}"}
     else:
-        scorableMatches.append(item["key"])
+        scorableMatches.append(item["key"], item["winning_alliance"], {"blue": item["score_breakdown"]["blue"]["totalPoints"], "red": item["score_breakdown"]["red"]["totalPoints"]})
 gameMatches = dict(sorted(gameMatches.items()))
 gameMatches = gameMatches.values()
 
@@ -160,23 +160,14 @@ def point_picker():
     return render_template("point_picker.html", gameMatches=gameMatches)
 
 
-@app.route("/admin")
-def admin():
-    if(not session["admin"]):
-        redirect("/")
-    return render_template("admin.html")
-
-@app.route("/admin/red-or-blue", methods=['GET', 'POST'])
+@app.route("/admin", methods=['GET', 'POST'])
 def adminRedBlue():
     if(not session["admin"]):
         redirect("/")
-    return render_template("adminRedBlue.html")
+    if request.method == 'POST':
+        print("a")
+    return render_template("admin.html", scorableMatches=scorableMatches)
 
-@app.route("/admin/points", methods=['GET', 'POST'])
-def adminPoints():
-    if(not session["admin"]):
-        redirect("/")
-    return render_template("adminPoints.html")
 
 
 def checkValidity(username:str, wager:float)->bool:
