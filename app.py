@@ -33,11 +33,8 @@ path1 = (f"matches_{key}.json")
 
 match_data = read_json(path1)
 
-redAlliance = []
-blueAlliance = []
-gameMatches = []
-matchInfo = {}
 
+gameMatches = []
 for item in match_data:
     if(item["actual_time"] is None):
         gameMatches.append({"key": item["key"], "blue":item["alliances"]["blue"]["team_keys"], "red":item["alliances"]["red"]["team_keys"]})
