@@ -47,7 +47,7 @@ def tba_matches(key: str):
     response = requests.get(
         f"https://www.thebluealliance.com/api/v3/event/{key}/matches", headers
     )
-    with open(f"matches_{key}.json", "wb") as f:
+    with open(f"data/matches_{key}.json", "wb") as f:
         f.write(response.content)
     return ()
 
@@ -56,7 +56,7 @@ key = "2024casf"
 # Pull the latest data
 tba_matches(key)
 
-match_data = readJSON(f"matches_{key}.json")
+match_data = readJSON(f"data/matches_{key}.json")
 
 
 gameMatches = {}
