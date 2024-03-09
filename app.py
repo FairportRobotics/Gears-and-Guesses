@@ -28,6 +28,11 @@ def read_json(path):
     data = json.load(f)
     f.close()
     return(data)
+
+def writeJson(path, data):
+    with open(f'{path}.json', 'w') as f:
+        f.write(json.dumps(data))
+
 path1 = (f"matches_{key}.json")
 
 
@@ -63,19 +68,18 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        user = read_json("users.json")
+        users = read_json("data/users.json")
         if username in user:
             return render_template(
                 "auth/register.html", errorMessage="This user already exists"
             )
         else:
-            user[username] = {
+            users[username] = {
                 "password": password,
                 "balance": 100,
                 "administrator": False,
             }
-            with open(f"users.json", "w") as f:
-                json.dump(user, f)
+            writeJson("data/users", users)
             return redirect("/login")
     return render_template("auth/register.html")
 
@@ -87,7 +91,7 @@ def login():
         print(username)
         password = request.form["password"]
         session["username"] = username
-        user = read_json("users.json")
+        user = read_json("data/users.json")
         if username in user and user[username]["password"] == password:
             session["admin"] = user[username]["administrator"]
             return redirect("/")
@@ -106,7 +110,7 @@ def logout():
 
 @app.route("/leaderboard")
 def leaderboard():
-    users = read_json("users.json")
+    users = read_json("data/users.json")
     userBalances = {}
     for k in users:
         balance = users[k]["balance"]
@@ -120,7 +124,6 @@ def leaderboard():
         for user in userBalances[k1]:
             i+=1
             userScores.append((i, user, k1))
-    print (userScores)
     return render_template("leaderboard.html", userScores=userScores)
 
 
@@ -140,13 +143,13 @@ def red_or_blue():
         file_path = f'data/red_or_blue/{match}.json'
         username = session["username"]
         if checkValidity(username, wager):
+
             try:
                 data = read_json(file_path)
             except:
                 data = []
-            data.append({"username": username, "alliance": alliance, "wager": wager})
-            with open(file_path, 'w') as f:
-                f.write(json.dumps(data))
+            data.append({"username": username, "alliance": alliance, "wager": wager, "results": "undetermined"})
+            writeJson(f'data/red_or_blue/{match}.json', data)
         else:
             return render_template("red_or_blue.html", gameMatches=gameMatches, error_message=f"You don't have {wager} roboCoins!")
     return render_template("red_or_blue.html", gameMatches=gameMatches)
@@ -177,8 +180,13 @@ def adminPoints():
 
 
 def checkValidity(username:str, wager:float)->bool:
-    users = read_json("users.json")
+    users = read_json("data/users.json")
     return float(users[username]["balance"]) >= float(wager)
+
+def accountPayment(username:str, wager:float):
+    users = read_json("data/users.json")
+    users[username]["balance"] -= wager
+    writeJson("data/users", users)
 
 
 if __name__ == "__main__":
