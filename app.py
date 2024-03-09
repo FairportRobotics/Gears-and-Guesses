@@ -22,7 +22,8 @@ def tba_matches(key: str):
 
 key = "2023nyrr"
 #key = "2024paca"
-tba_matches(key)
+#key="2024casf"
+#tba_matches(key)
 
 def read_json(path):
     f = open(path)
@@ -131,8 +132,15 @@ def red_or_blue():
         alliance = request.form["alliance"]
         wager = request.form["wager"]
         print(match+" "+alliance+" "+wager)
-        with open(f'data/red_or_blue/{match}.json', 'w') as f:
-            f.write()
+        file_path = f'data/red_or_blue/{match}.json'
+        try:
+            with open(file_path, "r") as f:
+                data = json.load(f)
+        except:
+            data = []
+        data.append({"username": "username", "alliance": alliance, "wager": wager})
+        with open(file_path, 'w') as f:
+            f.write(json.dumps(data))
     return render_template("red_or_blue.html", redAlliance=redAlliance, blueAlliance=blueAlliance)
 
 
