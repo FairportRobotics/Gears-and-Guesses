@@ -216,7 +216,7 @@ def red_or_blue():
             )
             writeJSON(f"data/red_or_blue/{match}.json", data)
             # Deduct money for the wager
-            accountPayment(username, -1 * float(wager))
+            accountPayment(username, -1 * round(float(wager), 2))
         else:
             return render_template(
                 "red_or_blue.html",
