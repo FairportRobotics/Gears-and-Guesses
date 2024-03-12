@@ -6,7 +6,14 @@
       <div class="card">
         <div class="card-content">
           <span class="card-title red-text">Your Guesses</span>
+          {% if red_or_blue_wagers|length == 0%}
           <p>Nothing to see here right now.</p>
+          {% else %}
+          <p>Red or Blue</p>
+          {% for row in red_or_blue_wagers %}
+          <span>{{row["key"]}} ({{row["results"]}}): ${{row["wager"]}}</span><br/>
+          {% endfor %}
+          {% endif %}
         </div>
         <div class="card-action">
           <a class="blue-text" href="/games">Make a guess</a>
