@@ -58,7 +58,7 @@ def tba_matches(key: str):
     return ()
 
 
-key="2024azva"
+key="2024casf"
 tba_matches(key)
 
 match_data = readJSON(f"data/matches_{key}.json")
@@ -234,14 +234,16 @@ def admin():
     checkLoggedIn()
     if not session["admin"]:
         redirect("/")
-    for name in glob.glob("data/red_or_blue/*.json"):
-        print(name)
-    # use glob to get the list of files in data/red_or_blue
-    # loop over those files and open the json
-    # check the status of the first item to see if it's unscored
-    # if so, add the match key to the scorable rd or blue list
-    # pass the list into the template
-    return render_template("admin.html")
+    # Check to see which events can be scored
+    red_or_blue = []
+    for file_path in glob.glob(f"data/red_or_blue/{key}*.json"):
+        check_me = readJSON(file_path)
+        file_name = file_path.replace(".json", "").replace("\\", "/").split("/")[-1]
+        if check_me[0]["results"] == "undetermined" and file_name in scorableMatches:
+            red_or_blue.append(file_name)
+
+    return render_template("admin.html", red_or_blue=red_or_blue)
+
 
 
 @app.route("/score/red-or-blue/<file_name>")
