@@ -21,7 +21,7 @@ def tba_matches(key: str):
         f.write(response.content)
     return()
 
-key="2024mose"
+key="2024azva"
 tba_matches(key)
 
 def read_json(path):
@@ -166,7 +166,8 @@ def admin():
     if(not session["admin"]):
         redirect("/")
     for name in glob.glob("data/red_or_blue/*.json"):
-        print(name)
+        data = read_json(name)
+        #if data[0]["results"] is "undetermined":
     # use glob to get the list of files in data/red_or_blue
     # loop over those files and open the json
     # check the status of the first item to see if it's unscored
