@@ -63,10 +63,11 @@ tba_matches(key)
 
 match_data = readJSON(f"data/matches_{key}.json")
 
-
+all_matches = {}
 gameMatches = {}
 scorableMatches = []
 for item in match_data:
+    all_matches[item["key"]] = {"match_number":item["match_number"]}
     if item["actual_time"] is None:
         blue_text = ", ".join(
             [x.replace("frc", "") for x in item["alliances"]["blue"]["team_keys"]]
@@ -91,7 +92,7 @@ gameMatches = gameMatches.values()
 def home():
     checkLoggedIn()
     # TODO Get the guesses for the user
-    my_red_or_blue_wagers = []
+    my_red_or_blue_wagers = {}
     users = readJSON("data/users.json")
     for file_path in glob.glob(f"data/red_or_blue/{key}*.json"):
         for row in readJSON(file_path):
@@ -99,13 +100,16 @@ def home():
                 match_name = (
                     file_path.replace(".json", "").replace("\\", "/").split("/")[-1]
                 )
-                my_red_or_blue_wagers.append(
-                    {
-                        "key": match_name,
-                        "wager": row["wager"],
-                        "results": row["results"],
-                    }
-                )
+                match_number = all_matches[match_name]["match_number"]
+                my_red_or_blue_wagers[match_number] = my_red_or_blue_wagers.get(match_number, {
+                    "key": match_name,
+                    "wager": 0,
+                    "results": row["results"],
+                    "match_number": all_matches[match_name]["match_number"]
+                })
+                my_red_or_blue_wagers[match_number]["wager"] = my_red_or_blue_wagers[match_number].get("wager", 0) + float(row["wager"])
+    my_red_or_blue_wagers = dict(sorted(my_red_or_blue_wagers.items()))
+    my_red_or_blue_wagers = my_red_or_blue_wagers.values()
     return render_template("home.html", red_or_blue_wagers=my_red_or_blue_wagers, userBalance=users[session["username"]]["balance"])
 
 

@@ -8,7 +8,7 @@
         <span class="card-title red-text">The Leaderboard</span>
         <ul class="collection">
           {% for row in userScores %}
-          <li class="collection-item">{{row[0]}}:  {{row[1]}}<span class="badge">{{ 'R￠{:,.2f}'.format(row[2]) }}</span></li>
+          <li class="collection-item">{{row[0]}}:  {{row[1]}}<span class="badge">{{ '{:,.2f} R￠'.format(row[2]) }}</span></li>
           {% endfor %}
         </ul>
       </div>
