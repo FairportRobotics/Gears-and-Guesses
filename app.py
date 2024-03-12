@@ -42,6 +42,12 @@ def writeJSON(path, data):
         f.write(json.dumps(data))
 
 
+def checkLoggedIn():
+    if not "username" in session:
+        return render_template("auth/login.html")
+
+
+
 def tba_matches(key: str):
     headers = {"X-TBA-Auth-Key": tba_api_key}
     response = requests.get(
@@ -52,8 +58,7 @@ def tba_matches(key: str):
     return ()
 
 
-key = "2024casf"
-# Pull the latest data
+key="2024azva"
 tba_matches(key)
 
 match_data = readJSON(f"data/matches_{key}.json")
@@ -84,8 +89,7 @@ gameMatches = gameMatches.values()
 
 @app.route("/")
 def home():
-    if not "username" in session:
-        return render_template("auth/login.html")
+    checkLoggedIn()
     # TODO Get the guesses for the user
     my_red_or_blue_wagers = []
     for file_path in glob.glob(f"data/red_or_blue/{key}*.json"):
@@ -111,6 +115,7 @@ def home():
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
+    checkLoggedIn()
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -133,6 +138,7 @@ def register():
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
+    checkLoggedIn()
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -151,12 +157,14 @@ def login():
 
 @app.route("/logout")
 def logout():
+    checkLoggedIn()
     session.pop("username", None)
     return redirect("/")
 
 
 @app.route("/leaderboard")
 def leaderboard():
+    checkLoggedIn()
     users = readJSON("data/users.json")
     userBalances = {}
     for k in users:
@@ -176,11 +184,13 @@ def leaderboard():
 
 @app.route("/games")
 def games():
+    checkLoggedIn()
     return render_template("games.html")
 
 
 @app.route("/games/red-or-blue", methods=["POST", "GET"])
 def red_or_blue():
+    checkLoggedIn()
     if request.method == "POST":
         match = request.form["match"]
         alliance = request.form["alliance"]
@@ -215,26 +225,28 @@ def red_or_blue():
 
 @app.route("/games/point-picker")
 def point_picker():
+    checkLoggedIn()
     return render_template("point_picker.html", gameMatches=gameMatches)
 
 
 @app.route("/admin")
 def admin():
+    checkLoggedIn()
     if not session["admin"]:
         redirect("/")
-    # Check to see which events can be scored
-    red_or_blue = []
-    for file_path in glob.glob(f"data/red_or_blue/{key}*.json"):
-        check_me = readJSON(file_path)
-        file_name = file_path.replace(".json", "").replace("\\", "/").split("/")[-1]
-        if check_me[0]["results"] == "undetermined" and file_name in scorableMatches:
-            red_or_blue.append(file_name)
-
-    return render_template("admin.html", red_or_blue=red_or_blue)
+    for name in glob.glob("data/red_or_blue/*.json"):
+        print(name)
+    # use glob to get the list of files in data/red_or_blue
+    # loop over those files and open the json
+    # check the status of the first item to see if it's unscored
+    # if so, add the match key to the scorable rd or blue list
+    # pass the list into the template
+    return render_template("admin.html")
 
 
 @app.route("/score/red-or-blue/<file_name>")
 def score_red_or_blue(file_name):
+    checkLoggedIn()
     # Get the winning alliance
     for match in match_data:
         if match["key"] == file_name:
