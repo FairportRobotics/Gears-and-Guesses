@@ -44,7 +44,7 @@ def writeJSON(path, data):
 
 def checkLoggedIn():
     if not "username" in session:
-        return render_template("auth/login.html")
+        return redirect("/login")
 
 
 
@@ -90,6 +90,8 @@ gameMatches = gameMatches.values()
 
 @app.route("/")
 def home():
+    if not "username" in session:
+        return redirect("/login")
     checkLoggedIn()
     # TODO Get the guesses for the user
     my_red_or_blue_wagers = {}
