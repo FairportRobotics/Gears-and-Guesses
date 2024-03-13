@@ -11,7 +11,7 @@
           {% else %}
           <p>Red or Blue</p>
           {% for row in red_or_blue_wagers %}
-          <span>{{row["key"]}} ({{row["results"]}}): ${{row["wager"]}}</span><br/>
+          <span>Match {{row["match_number"]}} ({{row["results"]}}): {{ '{:,.2f} R￠'.format(row["wager"]) }}</span><br/>
           {% endfor %}
           {% endif %}
         </div>

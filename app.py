@@ -44,7 +44,7 @@ def writeJSON(path, data):
 
 def checkLoggedIn():
     if not "username" in session:
-        return render_template("auth/login.html")
+        return redirect("/login")
 
 
 
@@ -63,10 +63,11 @@ tba_matches(key)
 
 match_data = readJSON(f"data/matches_{key}.json")
 
-
+all_matches = {}
 gameMatches = {}
 scorableMatches = []
 for item in match_data:
+    all_matches[item["key"]] = {"match_number":item["match_number"]}
     if item["actual_time"] is None:
         blue_text = ", ".join(
             [x.replace("frc", "") for x in item["alliances"]["blue"]["team_keys"]]
@@ -89,23 +90,29 @@ gameMatches = gameMatches.values()
 
 @app.route("/")
 def home():
+    if not "username" in session:
+        return redirect("/login")
     checkLoggedIn()
     # TODO Get the guesses for the user
-    my_red_or_blue_wagers = []
+    my_red_or_blue_wagers = {}
+    users = readJSON("data/users.json")
     for file_path in glob.glob(f"data/red_or_blue/{key}*.json"):
         for row in readJSON(file_path):
             if row["username"] == session["username"]:
                 match_name = (
                     file_path.replace(".json", "").replace("\\", "/").split("/")[-1]
                 )
-                my_red_or_blue_wagers.append(
-                    {
-                        "key": match_name,
-                        "wager": row["wager"],
-                        "results": row["results"],
-                    }
-                )
-    return render_template("home.html", red_or_blue_wagers=my_red_or_blue_wagers)
+                match_number = all_matches[match_name]["match_number"]
+                my_red_or_blue_wagers[match_number] = my_red_or_blue_wagers.get(match_number, {
+                    "key": match_name,
+                    "wager": 0,
+                    "results": row["results"],
+                    "match_number": all_matches[match_name]["match_number"]
+                })
+                my_red_or_blue_wagers[match_number]["wager"] = my_red_or_blue_wagers[match_number].get("wager", 0) + float(row["wager"])
+    my_red_or_blue_wagers = dict(sorted(my_red_or_blue_wagers.items()))
+    my_red_or_blue_wagers = my_red_or_blue_wagers.values()
+    return render_template("home.html", red_or_blue_wagers=my_red_or_blue_wagers, userBalance=users[session["username"]]["balance"])
 
 
 # @app.route("/hello/<name>")
@@ -179,18 +186,20 @@ def leaderboard():
         for user in userBalances[k1]:
             i += 1
             userScores.append((i, user, k1))
-    return render_template("leaderboard.html", userScores=userScores)
+    return render_template("leaderboard.html", userScores=userScores, userBalance=users[session["username"]]["balance"])
 
 
 @app.route("/games")
 def games():
     checkLoggedIn()
-    return render_template("games.html")
+    users = readJSON("data/users.json")
+    return render_template("games.html", userBalance=users[session["username"]]["balance"])
 
 
 @app.route("/games/red-or-blue", methods=["POST", "GET"])
 def red_or_blue():
     checkLoggedIn()
+    users = readJSON("data/users.json")
     if request.method == "POST":
         match = request.form["match"]
         alliance = request.form["alliance"]
@@ -213,25 +222,27 @@ def red_or_blue():
             )
             writeJSON(f"data/red_or_blue/{match}.json", data)
             # Deduct money for the wager
-            accountPayment(username, -1 * float(wager))
+            accountPayment(username, -1 * round(float(wager), 2))
         else:
             return render_template(
                 "red_or_blue.html",
                 gameMatches=gameMatches,
                 error_message=f"You don't have {wager} roboCoins!",
             )
-    return render_template("red_or_blue.html", gameMatches=gameMatches)
+    return render_template("red_or_blue.html", gameMatches=gameMatches, userBalance=users[session["username"]]["balance"])
 
 
 @app.route("/games/point-picker")
 def point_picker():
     checkLoggedIn()
-    return render_template("point_picker.html", gameMatches=gameMatches)
+    users = readJSON("data/users.json")
+    return render_template("point_picker.html", gameMatches=gameMatches, userBalance=users[session["username"]]["balance"])
 
 
 @app.route("/admin")
 def admin():
     checkLoggedIn()
+    users = readJSON("data/users.json")
     if not session["admin"]:
         redirect("/")
     # Check to see which events can be scored
@@ -242,7 +253,7 @@ def admin():
         if check_me[0]["results"] == "undetermined" and file_name in scorableMatches:
             red_or_blue.append(file_name)
 
-    return render_template("admin.html", red_or_blue=red_or_blue)
+    return render_template("admin.html", red_or_blue=red_or_blue, userBalance=users[session["username"]]["balance"])
 
 
 
