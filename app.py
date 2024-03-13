@@ -47,7 +47,6 @@ def checkLoggedIn():
         return redirect("/login")
 
 
-
 def tba_matches(key: str):
     headers = {"X-TBA-Auth-Key": tba_api_key}
     response = requests.get(
@@ -58,7 +57,7 @@ def tba_matches(key: str):
     return ()
 
 
-key="2024casf"
+key = "2024casf"
 tba_matches(key)
 
 match_data = readJSON(f"data/matches_{key}.json")
@@ -67,7 +66,7 @@ all_matches = {}
 gameMatches = {}
 scorableMatches = []
 for item in match_data:
-    all_matches[item["key"]] = {"match_number":item["match_number"]}
+    all_matches[item["key"]] = {"match_number": item["match_number"]}
     if item["actual_time"] is None:
         blue_text = ", ".join(
             [x.replace("frc", "") for x in item["alliances"]["blue"]["team_keys"]]
@@ -103,16 +102,25 @@ def home():
                     file_path.replace(".json", "").replace("\\", "/").split("/")[-1]
                 )
                 match_number = all_matches[match_name]["match_number"]
-                my_red_or_blue_wagers[match_number] = my_red_or_blue_wagers.get(match_number, {
-                    "key": match_name,
-                    "wager": 0,
-                    "results": row["results"],
-                    "match_number": all_matches[match_name]["match_number"]
-                })
-                my_red_or_blue_wagers[match_number]["wager"] = my_red_or_blue_wagers[match_number].get("wager", 0) + float(row["wager"])
+                my_red_or_blue_wagers[match_number] = my_red_or_blue_wagers.get(
+                    match_number,
+                    {
+                        "key": match_name,
+                        "wager": 0,
+                        "results": row["results"],
+                        "match_number": all_matches[match_name]["match_number"],
+                    },
+                )
+                my_red_or_blue_wagers[match_number]["wager"] = my_red_or_blue_wagers[
+                    match_number
+                ].get("wager", 0) + float(row["wager"])
     my_red_or_blue_wagers = dict(sorted(my_red_or_blue_wagers.items()))
     my_red_or_blue_wagers = my_red_or_blue_wagers.values()
-    return render_template("home.html", red_or_blue_wagers=my_red_or_blue_wagers, userBalance=users[session["username"]]["balance"])
+    return render_template(
+        "home.html",
+        red_or_blue_wagers=my_red_or_blue_wagers,
+        userBalance=users[session["username"]]["balance"],
+    )
 
 
 # @app.route("/hello/<name>")
@@ -186,14 +194,20 @@ def leaderboard():
         for user in userBalances[k1]:
             i += 1
             userScores.append((i, user, k1))
-    return render_template("leaderboard.html", userScores=userScores, userBalance=users[session["username"]]["balance"])
+    return render_template(
+        "leaderboard.html",
+        userScores=userScores,
+        userBalance=users[session["username"]]["balance"],
+    )
 
 
 @app.route("/games")
 def games():
     checkLoggedIn()
     users = readJSON("data/users.json")
-    return render_template("games.html", userBalance=users[session["username"]]["balance"])
+    return render_template(
+        "games.html", userBalance=users[session["username"]]["balance"]
+    )
 
 
 @app.route("/games/red-or-blue", methods=["POST", "GET"])
@@ -229,14 +243,22 @@ def red_or_blue():
                 gameMatches=gameMatches,
                 error_message=f"You don't have {wager} roboCoins!",
             )
-    return render_template("red_or_blue.html", gameMatches=gameMatches, userBalance=users[session["username"]]["balance"])
+    return render_template(
+        "red_or_blue.html",
+        gameMatches=gameMatches,
+        userBalance=users[session["username"]]["balance"],
+    )
 
 
 @app.route("/games/point-picker")
 def point_picker():
     checkLoggedIn()
     users = readJSON("data/users.json")
-    return render_template("point_picker.html", gameMatches=gameMatches, userBalance=users[session["username"]]["balance"])
+    return render_template(
+        "point_picker.html",
+        gameMatches=gameMatches,
+        userBalance=users[session["username"]]["balance"],
+    )
 
 
 @app.route("/admin")
@@ -253,8 +275,11 @@ def admin():
         if check_me[0]["results"] == "undetermined" and file_name in scorableMatches:
             red_or_blue.append(file_name)
 
-    return render_template("admin.html", red_or_blue=red_or_blue, userBalance=users[session["username"]]["balance"])
-
+    return render_template(
+        "admin.html",
+        red_or_blue=red_or_blue,
+        userBalance=users[session["username"]]["balance"],
+    )
 
 
 @app.route("/score/red-or-blue/<file_name>")
