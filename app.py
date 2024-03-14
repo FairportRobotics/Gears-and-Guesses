@@ -58,7 +58,7 @@ def tba_matches(key: str):
     return ()
 
 
-key="2024casf"
+key="2024azva"
 tba_matches(key)
 
 match_data = readJSON(f"data/matches_{key}.json")
@@ -90,7 +90,8 @@ gameMatches = gameMatches.values()
 
 @app.route("/")
 def home():
-    checkLoggedIn()
+    if not "username" in session:
+        return render_template("auth/login.html")
     # TODO Get the guesses for the user
     my_red_or_blue_wagers = {}
     users = readJSON("data/users.json")
