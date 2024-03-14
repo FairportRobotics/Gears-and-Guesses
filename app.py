@@ -57,7 +57,7 @@ def tba_matches(key: str):
     return ()
 
 
-key = "2024casf"
+key = "2024nyro"
 tba_matches(key)
 
 match_data = readJSON(f"data/matches_{key}.json")
@@ -133,6 +133,7 @@ def register():
     checkLoggedIn()
     if request.method == "POST":
         username = request.form["username"]
+        name = request.form["name"]
         password = request.form["password"]
         hashed_password = hash_me(password)
         users = readJSON("data/users.json")
@@ -142,6 +143,7 @@ def register():
             )
         else:
             users[username] = {
+                "name": name,
                 "password": hashed_password,
                 "balance": 1000,
                 "administrator": False,
@@ -159,9 +161,10 @@ def login():
         password = request.form["password"]
         hashed_password = hash_me(password)
         session["username"] = username
-        user = readJSON("data/users.json")
-        if username in user and user[username]["password"] == hashed_password:
-            session["admin"] = user[username]["administrator"]
+        users = readJSON("data/users.json")
+        if username in users and users[username]["password"] == hashed_password:
+            session["name"] = users[username]["name"]
+            session["admin"] = users[username]["administrator"]
             return redirect("/")
         else:
             return render_template(
@@ -184,8 +187,9 @@ def leaderboard():
     userBalances = {}
     for k in users:
         balance = users[k]["balance"]
+        real_name = users[k]["name"]
         certainBalance = userBalances.get(balance, [])
-        certainBalance.append(k)
+        certainBalance.append(real_name)
         userBalances[balance] = certainBalance
     userScores = []
     i = 0
