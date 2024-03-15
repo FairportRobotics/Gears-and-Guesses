@@ -82,7 +82,6 @@ for item in match_data:
 gameMatches = dict(sorted(gameMatches.items()))
 gameMatches = gameMatches.values()
 
-
 @app.route("/")
 def home():
     if not "username" in session:
