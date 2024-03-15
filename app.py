@@ -234,7 +234,7 @@ def red_or_blue():
                     "results": "undetermined",
                 }
             )
-            writeJSON(f"data/red_or_blue/{match}.json", data)
+            writeJSON(file_path, data)
             # Deduct money for the wager
             accountPayment(username, -1 * round(float(wager), 2))
         else:
