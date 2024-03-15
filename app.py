@@ -56,6 +56,7 @@ def tba_matches(key: str):
         f.write(response.content)
     return ()
 
+
 key = "2024nyro"
 
 tba_matches(key)
